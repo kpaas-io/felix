@@ -165,7 +165,8 @@ type Config struct {
 	EndpointReportingEnabled   bool          `config:"bool;false"`
 	EndpointReportingDelaySecs time.Duration `config:"seconds;1"`
 
-	IptablesMarkMask uint32 `config:"mark-bitmask;0xffff0000;non-zero,die-on-fail"`
+	IptablesMarkExternalAccept int    `config:"int;0;local"`
+	IptablesMarkMask           uint32 `config:"mark-bitmask;0xffff0000;non-zero,die-on-fail"`
 
 	DisableConntrackInvalidCheck bool `config:"bool;false"`
 

@@ -47,6 +47,8 @@ const (
 	ChainFailsafeIn  = ChainNamePrefix + "failsafe-in"
 	ChainFailsafeOut = ChainNamePrefix + "failsafe-out"
 
+	ChainAcceptMask = ChainNamePrefix + "accept-mask"
+
 	ChainNATPrerouting  = ChainNamePrefix + "PREROUTING"
 	ChainNATPostrouting = ChainNamePrefix + "POSTROUTING"
 	ChainNATOutput      = ChainNamePrefix + "OUTPUT"
@@ -217,6 +219,8 @@ type Config struct {
 
 	WorkloadIfacePrefixes []string
 
+	IptablesMarkExternalAccept uint32
+
 	IptablesMarkAccept   uint32
 	IptablesMarkPass     uint32
 	IptablesMarkScratch0 uint32
@@ -261,7 +265,7 @@ func (c *Config) validate() {
 	usedBits := uint32(0)
 	for i := 0; i < myValue.NumField(); i++ {
 		fieldName := myType.Field(i).Name
-		if strings.HasPrefix(fieldName, "IptablesMark") && fieldName != "IptablesMarkNonCaliEndpoint" {
+		if strings.HasPrefix(fieldName, "IptablesMark") && fieldName != "IptablesMarkNonCaliEndpoint" && fieldName != "IptablesMarkExternalAccept" {
 			bits := myValue.Field(i).Interface().(uint32)
 			if bits == 0 {
 				log.WithField("field", fieldName).Panic(

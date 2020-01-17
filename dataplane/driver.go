@@ -26,8 +26,8 @@ import (
 	"runtime/debug"
 
 	"github.com/projectcalico/felix/config"
-	"github.com/projectcalico/felix/dataplane/external"
-	"github.com/projectcalico/felix/dataplane/linux"
+	extdataplane "github.com/projectcalico/felix/dataplane/external"
+	intdataplane "github.com/projectcalico/felix/dataplane/linux"
 	"github.com/projectcalico/felix/ifacemonitor"
 	"github.com/projectcalico/felix/ipsets"
 	"github.com/projectcalico/felix/logutils"
@@ -111,6 +111,7 @@ func StartDataplaneDriver(configParams *config.Config,
 				OpenStackMetadataIP:          net.ParseIP(configParams.MetadataAddr),
 				OpenStackMetadataPort:        uint16(configParams.MetadataPort),
 
+				IptablesMarkExternalAccept:  uint32(configParams.IptablesMarkExternalAccept),
 				IptablesMarkAccept:          markAccept,
 				IptablesMarkPass:            markPass,
 				IptablesMarkScratch0:        markScratch0,
