@@ -300,8 +300,19 @@ func (r *DefaultRuleRenderer) endpointIptablesChain(
 		})
 	}
 
+	// add return for packets accepted by external rules to accept them.
+	if r.IptablesMarkExternalAccept != 0 {
+		rules = append(rules, Rule{
+			Match: Match().MarkMatchesWithMask(
+				r.IptablesMarkExternalAccept, r.IptablesMarkExternalAccept),
+			Action:  ReturnAction{},
+			Comment: "accept packets marked by external source",
+		})
+	}
+
 	// Start by ensuring that the accept mark bit is clear, policies set that bit to indicate
 	// that they accepted the packet.
+
 	rules = append(rules, Rule{
 		Action: ClearMarkAction{
 			Mark: r.IptablesMarkAccept,
